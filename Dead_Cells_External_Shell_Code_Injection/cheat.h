@@ -12,6 +12,7 @@ public:
 	void RestoreMemory();
 	bool FindHookAddr();
 	bool IsBufferEmpty() { return buffer.empty(); };
+
 private:
 	BYTE* hook_addr{ nullptr };
 	bool og_bytes_saved{ false };

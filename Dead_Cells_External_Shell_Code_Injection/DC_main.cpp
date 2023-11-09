@@ -7,8 +7,8 @@ int main()
 {
 	Game game{ L"deadcells.exe", L"" };
 	ShellCode shell;
-	Pattern OHKO_pattern{ "\x2B\x4D\xDC\x89\x4D\xD0", "xxxxxx", game, (char*)0x10000000, (char*)0x20000000 };
-	Cheat OHKO_cheat{ game, OHKO_pattern, shell.OHKO_shell_code, shell.OHKO_bytes_to_erase };
+	Pattern god_mode_pattern{ "\x2B\x4D\xDC\x89\x4D\xD0", "xxxxxx", game, (char*)0x10000000, (char*)0x20000000 };
+	Cheat god_mode_cheat{ game, god_mode_pattern, shell.god_mode_shell_code, shell.god_mode_bytes_to_erase };
 
 	while (!game.IsRunning())
 	{
@@ -19,29 +19,38 @@ int main()
 	// Sleep for 2 seconds to give the game enough time to allocate all the memory
 	Sleep(2000);
 
-	std::print("Inizialization complete.\n");
-
-	assert(OHKO_cheat.FindHookAddr());
-	if (OHKO_cheat.FindHookAddr())
+	std::printf("Inizialization complete.\n");
+	
+	assert(god_mode_cheat.FindHookAddr());
+	if (god_mode_cheat.FindHookAddr())
 	{
-		std::print("Address of OHKO found.\n");
+		std::printf("GodMode's hook address found.\n");
 	}
 
 	while (game.IsRunning())
 	{
 		if (GetAsyncKeyState(VK_NUMPAD1) & 1)
-
 		{
-			OHKO_cheat.NopMemory();
-			OHKO_cheat.WriteMemory();
+			shell.god_mode_active = !shell.god_mode_active;
+
+			if (shell.god_mode_active)
+			{
+				god_mode_cheat.NopMemory();
+				god_mode_cheat.WriteMemory();
+			}
+
+			if (!shell.god_mode_active)
+			{
+				if (!god_mode_cheat.IsBufferEmpty())
+				{
+					god_mode_cheat.RestoreMemory();
+				}
+			}
 		}
 
 		if (GetAsyncKeyState(VK_NUMPAD2) & 1)
 		{
-			if (!OHKO_cheat.IsBufferEmpty())
-			{
-				OHKO_cheat.RestoreMemory();
-			}
+			
 		}
 
 		if (GetAsyncKeyState(VK_NUMPAD3) & 1)
