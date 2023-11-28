@@ -10,10 +10,10 @@ public:
 	void Initialize();
 	bool GetProcessId();
 	MODULEENTRY32 GetModule();
-	bool IsRunning();
+	bool IsRunning() const;
 	bool OpenProcHandle();
-	HANDLE GetProcHandle() { return proc_handle; };
-	std::wstring GetModuleName() { return module_name; };
+	HANDLE GetProcHandle() const { return proc_handle; };
+	std::wstring GetModuleName() const { return module_name; };
 
 private:
 	std::wstring exe_name;
