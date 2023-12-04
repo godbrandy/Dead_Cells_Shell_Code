@@ -19,15 +19,11 @@ void Cheat::WriteMemory()
 	DWORD old_protection{};
 	BYTE call_code{ 0xE8 };
 
-	if (alloc_addr)
-	{
-		VirtualFreeEx(game.GetProcHandle(), (uintptr_t*)alloc_addr, 0, MEM_RELEASE);
-	}
 	// Allocated a region of memory in the target process
-	alloc_addr = (uintptr_t)VirtualAllocEx(game.GetProcHandle(), NULL, 64, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+	alloc_addr.reset((uintptr_t*)VirtualAllocEx(game.GetProcHandle(), NULL, 0x1000, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE));
 
 	// Find the distance between the alloc_addr and the hook_addr
-	uintptr_t relative_addr = alloc_addr - (uintptr_t)hook_addr - 5;
+	uintptr_t relative_addr = (uintptr_t)alloc_addr.get() - (uintptr_t)hook_addr - 5;
 
 	if (relative_addr && alloc_addr)
 	{
@@ -40,7 +36,7 @@ void Cheat::WriteMemory()
 		WriteProcessMemory(game.GetProcHandle(), hook_addr + 1, &relative_addr, sizeof(relative_addr), nullptr);
 
 		// Write the shell code to the region of memory allocated earlier
-		WriteProcessMemory(game.GetProcHandle(), (uintptr_t*)alloc_addr, shell_code.data(), shell_code.size(), nullptr);
+		WriteProcessMemory(game.GetProcHandle(), alloc_addr.get(), shell_code.data(), shell_code.size(), nullptr);
 
 		VirtualProtectEx(game.GetProcHandle(), hook_addr, len, old_protection, &old_protection);
 	}
