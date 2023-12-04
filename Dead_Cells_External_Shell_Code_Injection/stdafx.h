@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 #include <assert.h>
+#include <print>
+#include <chrono>
 #include "game.h"
 #include "pattern.h"
 #include "cheat.h"

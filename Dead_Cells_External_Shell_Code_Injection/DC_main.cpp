@@ -17,14 +17,17 @@ int main()
 	}
 
 	// Sleep for 2 seconds to give the game enough time to allocate all the memory
-	Sleep(2000);
+	//Sleep(2000);
 
-	std::printf("Inizialization complete.\n");
+	std::print("Inizialization complete.\n");
 	
 	assert(god_mode_cheat.FindHookAddr());
+	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 	if (god_mode_cheat.FindHookAddr())
 	{
-		std::printf("GodMode's hook address found.\n");
+		std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+		std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
+		std::print("GodMode's hook address found.\nPress NUM Pad 1 to activate.\n");
 	}
 
 	while (game.IsRunning())
@@ -37,6 +40,7 @@ int main()
 			{
 				god_mode_cheat.NopMemory();
 				god_mode_cheat.WriteMemory();
+				std::print("God Mode Activated.\n");
 			}
 
 			if (!shell.god_mode_active)
@@ -44,6 +48,7 @@ int main()
 				if (!god_mode_cheat.IsBufferEmpty())
 				{
 					god_mode_cheat.RestoreMemory();
+					std::print("God Mode Deactivated.\n");
 				}
 			}
 		}
