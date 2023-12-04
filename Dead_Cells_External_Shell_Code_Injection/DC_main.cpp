@@ -17,16 +17,13 @@ int main()
 	}
 
 	// Sleep for 2 seconds to give the game enough time to allocate all the memory
-	//Sleep(2000);
+	Sleep(2000);
 
 	std::print("Inizialization complete.\n");
 	
 	assert(god_mode_cheat.FindHookAddr());
-	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 	if (god_mode_cheat.FindHookAddr())
 	{
-		std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-		std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
 		std::print("GodMode's hook address found.\nPress NUM Pad 1 to activate.\n");
 	}
 
