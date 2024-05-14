@@ -22,8 +22,16 @@ void Cheat::WriteMemory()
 	// Allocated a region of memory in the target process
 	alloc_addr.reset((uintptr_t*)VirtualAllocEx(game.GetProcHandle(), NULL, 0x1000, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE));
 
+	// if on 64-bit mode, i need to subtract 9 to fine the relative address (8-byte address + 1 call opcode)
+#ifdef  _WIN64
+	size_t IP_minus{ 9 };
+	// if on 32-bit mode, i need to subtract 5 to fine the relative address (4-byte address + 1 call opcode)
+#else
+	size_t IP_minus{ 5 };
+#endif //  _WIN64
+
 	// Find the distance between the alloc_addr and the hook_addr
-	uintptr_t relative_addr = (uintptr_t)alloc_addr.get() - (uintptr_t)hook_addr - 5;
+	uintptr_t relative_addr = (uintptr_t)alloc_addr.get() - (uintptr_t)hook_addr - IP_minus;
 
 	if (relative_addr && alloc_addr)
 	{
@@ -80,9 +88,10 @@ void Cheat::RestoreMemory()
 	VirtualProtectEx(game.GetProcHandle(), hook_addr, len, old_protection, &old_protection);
 }
 
-bool Cheat::FindHookAddr()
+uintptr_t Cheat::FindHookAddr()
 {
 	// Find the address of the first byte of the pattern
-	return hook_addr = (BYTE*)pattern.MemoryScan();
+	hook_addr = (BYTE*)pattern.MemoryScan();
+	return (uintptr_t)hook_addr;
 }
 

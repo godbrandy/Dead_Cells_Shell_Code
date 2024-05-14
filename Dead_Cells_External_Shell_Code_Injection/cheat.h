@@ -10,7 +10,7 @@ public:
 	void WriteMemory();
 	void NopMemory();
 	void RestoreMemory();
-	bool FindHookAddr();
+	uintptr_t FindHookAddr();
 	bool IsBufferEmpty() { return buffer.empty(); };
 
 private:

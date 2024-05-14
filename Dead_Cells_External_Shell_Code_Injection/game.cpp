@@ -104,7 +104,7 @@ MODULEENTRY32 Game::GetModule()
 	return module_entry;
 }
 
-bool Game::IsRunning() const
+DWORD Game::IsRunning() const
 {
 	return proc_id;
 }

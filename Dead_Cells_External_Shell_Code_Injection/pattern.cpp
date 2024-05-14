@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-Pattern::Pattern(const std::string& pattern, const std::string& mask, Game& game, char* start, char* end)
+Pattern::Pattern(const std::vector<BYTE>& pattern, const std::string& mask, Game& game, char* start, char* end)
 	: pattern{ pattern }, mask{ mask }, game{ game }, start{ start }, end{ end }
 {
 }

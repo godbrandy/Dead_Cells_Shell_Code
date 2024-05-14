@@ -4,7 +4,7 @@
 class Pattern
 {
 public:
-	Pattern(const std::string& pattern, 
+	Pattern(const std::vector<BYTE>& pattern, 
 		const std::string& mask, 
 		Game& game, 
 		char* start = nullptr, 
@@ -16,7 +16,7 @@ public:
 	void* PatternMatch(const std::vector<char>& buffer);
 	
 private:
-	const std::string pattern;
+	const std::vector<BYTE>& pattern;
 	const std::string mask;
 	char* start;
 	char* end;
