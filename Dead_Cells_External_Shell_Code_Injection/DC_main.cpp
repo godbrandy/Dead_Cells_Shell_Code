@@ -5,10 +5,9 @@
 
 int main()
 {
-	const std::vector<BYTE> pattern{ 0x2B, 0x4D, 0xDC, 0x89, 0x4D, 0xD0 };
 	Game game{ L"deadcells.exe", L"" };
 	ShellCode shell;
-	Pattern god_mode_pattern{ pattern, "xxxxxx", game, (char*)0x10000000, (char*)0x20000000 };
+	Pattern god_mode_pattern{ shell.pattern, "xxxxxx", game, (char*)0x10000000, (char*)0x20000000 };
 	Cheat god_mode_cheat{ game, god_mode_pattern, shell.god_mode_shell_code, shell.god_mode_bytes_to_erase };
 
 	while (!game.IsRunning())
